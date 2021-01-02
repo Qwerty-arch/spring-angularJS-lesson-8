@@ -29,5 +29,14 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
                 $scope.fillTable();
             });
     };
+
+    $scope.deleteById = function (id) {
+            $http.get(contextPath + '/products', $scope.deleteById(id))
+                .then(function (response) {
+                //    $scope.ProductList.splice(id, 1);
+                    $scope.fillTable();
+                });
+        };
+
     $scope.fillTable();
 });

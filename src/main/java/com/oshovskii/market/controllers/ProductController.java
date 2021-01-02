@@ -24,14 +24,19 @@ public class ProductController {
         return productService.findAllByPrice(minPrice, maxPrice);
     }
 
-    @GetMapping("/{id}")
-    public Product findProductById(@PathVariable Long id) {
-        return productService.findProductById(id).get();
-    }
+//    @GetMapping("/{id}")
+//    public Product findProductById(@PathVariable Long id) {
+//        return productService.findProductById(id).get();
+//    }
 
     @PostMapping
     public Product saveNewProduct(@RequestBody Product product) {
         product.setId(null);
         return productService.saveOrUpdate(product);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteById(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 }
