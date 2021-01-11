@@ -30,10 +30,10 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     };
 
-    $scope.deleteById = function (id) {
-            $http.get(contextPath + '/products', $scope.deleteById(id))
+ $scope.deleteById = function (id) {
+            $http.get(contextPath + '/products/delete/' + id)
                 .then(function (response) {
-                //    $scope.ProductList.splice(id, 1);
+                 console.log(response);
                     $scope.fillTable();
                 });
         };
