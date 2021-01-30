@@ -1,5 +1,13 @@
-create table products (id bigserial primary key, title varchar(255), price int);
-insert into products (title, price) values
+create table products (
+    id              bigserial primary key,
+    title           varchar(255),
+    price           int,
+    created_at      timestamp default current_timestamp,
+    updated_at      timestamp default current_timestamp
+);
+
+insert into products (title, price)
+values
 ('american bobtail cat', 10000),
 ('bengal cat', 20000),
 ('sphynx cat', 15000),
@@ -20,3 +28,12 @@ insert into products (title, price) values
 ('sokoke cat', 30003),
 ('chartreux cat', 40004),
 ('birman cat', 50000);
+
+
+create table order_items (
+    id                      bigserial primary key,
+    title                   varchar(255),
+    quantity                int,
+    price_per_item          int,
+    price                   int
+);
