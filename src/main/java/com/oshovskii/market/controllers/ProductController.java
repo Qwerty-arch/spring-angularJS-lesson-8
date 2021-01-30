@@ -34,7 +34,7 @@ public class ProductController {
     // http://localhost:8189/market/api/v1/products
     @GetMapping("/{id}")
     public ProductDto findProductById(@PathVariable Long id) {
-        return productService.findProductById(id).orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + " doens't exist"));
+        return productService.findProductDtoById(id).orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + " doens't exist"));
     }
 
     @PostMapping

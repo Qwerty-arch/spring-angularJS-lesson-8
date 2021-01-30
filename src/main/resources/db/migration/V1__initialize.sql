@@ -30,19 +30,10 @@ values
 ('birman cat', 50000);
 
 
-create table cart (
-    cartId              bigserial primary key,
-    cartTitle           varchar(255),
-    cartPrice           int
-);
-
-create table orders (
-order_id      bigserial,
-product_id    bigserial,
-PRIMARY KEY   (order_id, product_id)
-);
-
-create table OrderProduct (
-orderProductPK      bigserial,
-quantity            INT
+create table order_items (
+    id                      bigserial primary key,
+    title                   varchar(255),
+    quantity                int,
+    price_per_item          int,
+    price                   int
 );

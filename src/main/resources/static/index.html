@@ -52,7 +52,7 @@
             <td>{{p.title}}</td>
             <td>{{p.price}}</td>
             <td>
-                <button class="btn btn-danger" ng-click="addProductByIdToCart(p.id)">Добавить товар в корзину</button>
+                <button class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
             </td>
             <td>
                 <button class="btn btn-danger" ng-click="deleteProductById(p.id)">Удалить товар</button>
@@ -77,6 +77,31 @@
         </ul>
     </nav>
 
+    <h3 ng-show="cartVisible">Корзина</h3>
+
+    <table ng-show="cartVisible" class="table table-hover" cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Количество</td>
+            <td>Цена</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="oi in Cart.items">
+            <td>{{oi.productTitle}}</td>
+            <td>{{oi.quantity}}</td>
+            <td>{{oi.quantity + ' x ' + oi.pricePerProduct + ' = ' + oi.price}}</td>
+        </tr>
+        <tr>
+            <td>Итого</td>
+            <td></td>
+            <td>{{Cart.totalPrice}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <button ng-show="cartVisible" class="btn btn-danger" ng-click="clearCart()">Очистить корзину</button>
+
     <h3>Добавить новый товар</h3>
     <form novalidate ng-submit="submitCreateNewProduct()">
         <div class="form-group col-md-6">
@@ -92,25 +117,7 @@
         </div>
     </form>
 
-    <h3>Корзина</h3>
-    <table class="table table-hover" cellpadding="0" cellspacing="0">
-        <thead>
-        <tr>
-            <td>Название</td>
-            <td>Цена</td>
-            <td></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="p in CartList.content">
-            <td>{{p.title}}</td>
-            <td>{{p.price}}</td>
-            <td>
-                <button class="btn btn-danger" ng-click="deleteProductById(p.id)">Удалить товар</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
 </div>
 </body>
 </html>
