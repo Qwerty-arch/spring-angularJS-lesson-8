@@ -1,42 +1,107 @@
 angular.module('market', []).controller('indexController', function ($scope, $http) {
     const contextPath = 'http://localhost:8189/market';
+    $scope.authorized = false;
 
-//     $scope.fillTable = function () {
-//         $http.get(contextPath + '/products')
-//             .then(function (response) {
-//                 console.log(response);
-//                 $scope.ProductsList = response.data;
-//             });
-//     };
 
-    $scope.fillTable = function () {
+    $scope.fillTable = function (pageIndex = 1) {
         $http({
-            url: contextPath + '/products',
+            url: contextPath + '/api/v1/products',
             method: 'GET',
             params: {
+                title: $scope.filter ? $scope.filter.title : null,
                 min_price: $scope.filter ? $scope.filter.min_price : null,
-                max_price: $scope.filter ? $scope.filter.max_price : null
+                max_price: $scope.filter ? $scope.filter.max_price : null,
+                p: pageIndex
             }
         }).then(function (response) {
-            $scope.ProductsList = response.data;
+            $scope.ProductsPage = response.data;
+
+            let minPageIndex = pageIndex - 2;
+            if (minPageIndex < 1) {
+                minPageIndex = 1;
+            }
+
+            let maxPageIndex = pageIndex + 2;
+            if (maxPageIndex > $scope.ProductsPage.totalPages) {
+                maxPageIndex = $scope.ProductsPage.totalPages;
+            }
+
+            $scope.PaginationArray = $scope.generatePagesIndexes(minPageIndex, maxPageIndex);
         });
     };
 
-    $scope.submitCreateNewProduct = function () {
-        $http.post(contextPath + '/products', $scope.newProduct)
-            .then(function (response) {
-                $scope.newProduct = null;
-                $scope.fillTable();
-            });
+    $scope.showCart = function () {
+        $http({
+            url: contextPath + '/api/v1/cart',
+            method: 'GET'
+        }).then(function (response) {
+            $scope.cartVisible;
+            $scope.Cart = response.data;
+        });
     };
 
- $scope.deleteById = function (id) {
-            $http.get(contextPath + '/products/delete/' + id)
-                .then(function (response) {
-                 console.log(response);
-                    $scope.fillTable();
+    $scope.generatePagesIndexes = function(startPage, endPage) {
+        let arr = [];
+        for (let i = startPage; i < endPage + 1; i++) {
+            arr.push(i);
+        }
+        return arr;
+    }
+
+//    $scope.submitCreateNewProduct = function () {
+//        $http.post(contextPath + '/products', $scope.newProduct)
+//            .then(function (response) {
+//                $scope.newProduct = null;
+//                $scope.fillTable();
+//            });
+//    };
+
+    $scope.deleteProductById = function (productId) {
+        $http.delete(contextPath + '/api/v1/products/' + productId)
+            .then(function (response) {
+                $scope.fillTable();
+            });
+    }
+
+    $scope.addToCart = function (productId) {
+        $http.get(contextPath + '/api/v1/cart/add/' + productId)
+            .then(function (response) {
+
+
+                $scope.cartVisible = true;
+                $scope.showCart();
+            });
+    }
+
+    $scope.clearCart = function () {
+        $http.get(contextPath + '/api/v1/cart/clear')
+            .then(function (response) {
+                $scope.cartVisible = false;
+                $scope.showCart();
+            });
+    }
+
+    $scope.tryToAuth = function () {
+            $http.post(contextPath + '/auth', $scope.user)
+                .then(function successCallback(response) {
+                    if (response.data.token) {
+                        $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+                        $scope.user.password = null;
+                        $scope.authorized = true;
+                        $scope.fillTable();
+                    }
+                }, function errorCallback(response) {
+                    window.alert("Error");
                 });
         };
 
-    $scope.fillTable();
+    $scope.saveOrder = function () {
+    $http.get(contextPath + '/api/v1/orders/add')
+    .then(function (response) {
+          //    $scope.orders = $http.get(contextPath + '/api/v1/cart');
+    });
+    }
+
+//    $scope.fillTable();
+//    $scope.showCart();
 });
