@@ -75,9 +75,12 @@ create table order_items (
     price                   int
 );
 
-create table orders (
-    id                      bigserial primary key,
-    orderItem_id            bigserial,
-    user_id                 bigserial,
-    quantity                int
-);
+--create table orders (
+--    id                      bigserial primary key,
+--    orderItem_id            bigserial,
+--    user_id                 bigserial,
+--    quantity                int
+--);
+
+
+create table orders ( orderItem_id bigserial, user_id bigserial, quantity int, FOREIGN KEY (orderItem_id) REFERENCES order_item (id), FOREIGN KEY (user_id) REFERENCES users (id));
