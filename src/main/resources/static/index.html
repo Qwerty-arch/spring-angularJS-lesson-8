@@ -16,10 +16,30 @@
 
 <div class="container" ng-controller="indexController">
     <h1>Market</h1>
+    <div class="mb-3 text-center" ng-show="!authorized">
+        <form class="form-signin" ng-submit="tryToAuth()" style="max-width: 350px; padding: 15px; margin: 0 auto;">
+            <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
+            <label for="inputUsername" class="sr-only">Имя пользователя</label>
+            <input type="text" ng-model="user.username" id="inputUsername" class="form-control"
+                   placeholder="Имя пользователя" style="margin-bottom: 10px;" required="">
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="Пароль"
+                   style="margin-bottom: 10px;" required="">
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+            <p class="mt-5 mb-3 text-muted">© GeekBrains 2021</p>
+        </form>
+    </div>
 
+    <div ng-show="authorized">
+        <tr>
+            <td>С возвращением, {{user.username}}</td>
+        </tr>
     <h3>Фильтр</h3>
     <form novalidate ng-submit="fillTable()">
         <div class="form-group row">
+<!--            <tr>-->
+<!--                <td>{{user.username}}</td>-->
+<!--            </tr>-->
             <div class="form-group col-md-3">
                 <label for="filterTitle">Название товара</label>
                 <input class="form-control" type="text" ng-model="filter.title" id="filterTitle">
@@ -77,7 +97,7 @@
         </ul>
     </nav>
 
-    <h3 ng-show="cartVisible">Корзина</h3>
+    <h3 ng-show="cartVisible">{{user.username}}. Корзина</h3>
 
     <table ng-show="cartVisible" class="table table-hover" cellpadding="0" cellspacing="0">
         <thead>
@@ -100,6 +120,7 @@
         </tr>
         </tbody>
     </table>
+    <button ng-show="cartVisible" class="btn btn-primary" ng-click="saveOrder()">Оформить заказ</button>
     <button ng-show="cartVisible" class="btn btn-danger" ng-click="clearCart()">Очистить корзину</button>
 
     <h3>Добавить новый товар</h3>
@@ -116,8 +137,7 @@
             <button class="btn btn-success" type="submit">Сохранить</button>
         </div>
     </form>
-
-
+    </div>
 </div>
 </body>
 </html>

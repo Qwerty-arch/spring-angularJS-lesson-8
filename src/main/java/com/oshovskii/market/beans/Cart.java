@@ -2,11 +2,14 @@ package com.oshovskii.market.beans;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import com.oshovskii.market.services.ProductService;
 import com.oshovskii.market.model.OrderItem;
 import com.oshovskii.market.exceptions_handling.ResourceNotFoundException;
 import com.oshovskii.market.model.Product;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
 public class Cart {
     private final ProductService productService;
