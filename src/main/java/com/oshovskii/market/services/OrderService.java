@@ -1,36 +1,30 @@
 package com.oshovskii.market.services;
 
-import com.oshovskii.market.exceptions_handling.ResourceNotFoundException;
+import com.oshovskii.market.beans.Cart;
 import com.oshovskii.market.model.Order;
-import com.oshovskii.market.model.OrderItem;
 import com.oshovskii.market.model.User;
 import com.oshovskii.market.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final UserService userService;
+    private final Cart cart;
 
-//    public List<Order> findAllOrders() {
-//        return orderRepository.findAll();
-//    }
-//
-//    public Order findOrderById(Long id) throws ResourceNotFoundException {
-//        return orderRepository.findById(id).orElseThrow(
-//                () -> new ResourceNotFoundException("Заказ не найден!")
-//        );
-//    }
-
-    public Order saveOrder(OrderItem orderItem, Principal principal) {
-        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("user not found"));
-        Order order = new Order(orderItem.getId(),user.getId(), orderItem.getQuantity());
-        return orderRepository.save(order);
+    // нужна ли тут аннотация @Transactional ?
+    public Order createFromUserCart(User user) {
+        Order order = new Order(cart, user);
+        order = orderRepository.save(order);
+        cart.clear();
+        return order;
     }
 
-
+    public List<Order> findAllOrdersByOwnerName(String username) {
+        return orderRepository.findAllByOwnerUsername(username);
+    }
 }
+

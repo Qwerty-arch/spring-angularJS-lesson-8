@@ -1,9 +1,9 @@
-angular.module('market', []).controller('indexController', function ($scope, $http) {
+angular.module('market', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
     const contextPath = 'http://localhost:8189/market';
     $scope.authorized = false;
+    $scope.registration = false;
 
-
-    $scope.fillTable = function (pageIndex = 1) {
+    $scope.showProductsPage = function (pageIndex = 1) {
         $http({
             url: contextPath + '/api/v1/products',
             method: 'GET',
@@ -40,6 +40,15 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
         });
     };
 
+    $scope.showMyOrders = function () {
+                $http({
+                    url: contextPath + '/api/v1/orders',
+                    method: 'GET'
+                }).then(function (response) {
+                    $scope.MyOrders = response.data;
+                });
+            };
+
     $scope.generatePagesIndexes = function(startPage, endPage) {
         let arr = [];
         for (let i = startPage; i < endPage + 1; i++) {
@@ -59,15 +68,13 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
     $scope.deleteProductById = function (productId) {
         $http.delete(contextPath + '/api/v1/products/' + productId)
             .then(function (response) {
-                $scope.fillTable();
+                $scope.showProductsPage();
             });
     }
 
     $scope.addToCart = function (productId) {
         $http.get(contextPath + '/api/v1/cart/add/' + productId)
             .then(function (response) {
-
-
                 $scope.cartVisible = true;
                 $scope.showCart();
             });
@@ -81,27 +88,66 @@ angular.module('market', []).controller('indexController', function ($scope, $ht
             });
     }
 
+
+
     $scope.tryToAuth = function () {
             $http.post(contextPath + '/auth', $scope.user)
                 .then(function successCallback(response) {
                     if (response.data.token) {
                         $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
+
+//                         $localStorage.happyUsername = $scope.user.username;
+//                         $localStorage.happyTokenWithBearerPrefix = 'Bearer ' + response.data.token;
+
+                        $scope.user.username = null;
                         $scope.user.password = null;
                         $scope.authorized = true;
-                        $scope.fillTable();
+                        $scope.showProductsPage();
+                        $scope.showMyOrders();
+                        $scope.showCart();
                     }
                 }, function errorCallback(response) {
                     window.alert("Error");
                 });
         };
 
-    $scope.saveOrder = function () {
-    $http.get(contextPath + '/api/v1/orders/add')
-    .then(function (response) {
-          //    $scope.orders = $http.get(contextPath + '/api/v1/cart');
-    });
-    }
+        $scope.tryToRegistration = function () {
+                    $http.post(contextPath + '/auth/registration', $scope.user)
+                        .then(function successCallback(response) {
+                                $scope.registration = false;
+                        }, function errorCallback(response) {
+                            window.alert("Error");
+                        });
+                };
 
-//    $scope.fillTable();
-//    $scope.showCart();
+        $scope.ButtonRegistration = function () {
+                         $scope.registration = true;
+                     }
+
+
+
+//     $scope.logout = function () {
+//                 $http.defaults.headers.common.Authorization = null;
+//                 delete $localStorage.happyUsername;
+//                 delete $localStorage.happyTokenWithBearerPrefix;
+//                 $scope.authorized = false;
+//             }
+
+    // TODO в будущем POST, а не GET
+    $scope.createOrder = function () {
+                $http.get(contextPath + '/api/v1/orders/create')
+                    .then(function (response) {
+                        $scope.showMyOrders();
+                        $scope.showCart();
+                    });
+            }
+
+//    if ($localStorage.happyUsername) {
+//                $http.defaults.headers.common.Authorization = $localStorage.happyTokenWithBearerPrefix;
+//                $scope.showProductsPage();
+//                $scope.showMyOrders();
+//                $scope.showCart();
+//                $scope.authorized = true;
+//            }
+
 });

@@ -9,6 +9,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
     <script src="index.js"></script>
 </head>
 
@@ -26,9 +27,32 @@
             <input type="password" ng-model="user.password" id="inputPassword" class="form-control" placeholder="Пароль"
                    style="margin-bottom: 10px;" required="">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-            <p class="mt-5 mb-3 text-muted">© GeekBrains 2021</p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit " ng-click="ButtonRegistration()">Регистрация</button>
+            <p class="mt-5 mb-3 text-muted">© Oshovskii Vlad 2021</p>
         </form>
+
+
     </div>
+    <div class="mb-3 text-center" ng-show="authorized">
+        <button class="btn btn-danger" ng-click="logout()">Выйти</button>
+    </div>
+
+      <div class="mb-3 text-center" ng-show="registration">
+           <form class="form-signin" ng-submit="tryToRegistration()" style="max-width: 350px; padding: 15px; margin: 0 auto;">
+                <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
+                <label for="inputUsername" class="sr-only">Имя пользователя</label>
+                <input type="text" ng-model="user.username1" id="inputRegistrationUsername" class="form-control"
+                       placeholder="Имя пользователя" style="margin-bottom: 10px;" required="">
+                <label for="inputPassword" class="sr-only">Пароль</label>
+                <input type="password" ng-model="user.password1" id="inputRegistrationPassword" class="form-control" placeholder="Пароль"
+                      style="margin-bottom: 10px;" required="">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+
+
+
+
 
     <div ng-show="authorized">
         <tr>
@@ -120,8 +144,30 @@
         </tr>
         </tbody>
     </table>
-    <button ng-show="cartVisible" class="btn btn-primary" ng-click="saveOrder()">Оформить заказ</button>
+    <button ng-show="cartVisible" class="btn btn-primary" ng-click="createOrder()">Оформить заказ</button>
     <button ng-show="cartVisible" class="btn btn-danger" ng-click="clearCart()">Очистить корзину</button>
+
+    <h3>Мои заказы</h3>
+        <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Имя пользователя</td>
+                <td>Цена</td>
+                <td>Дата создания</td>
+                <td>Адрес доставки</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="o in MyOrders">
+                <td>#{{o.id}}</td>
+                <td>{{o.username}}</td>
+                <td>{{o.totalPrice}}</td>
+                <td>{{o.creationDateTime}}</td>
+                <td>{{o.userAddress}}</td>
+            </tr>
+            </tbody>
+        </table>
 
     <h3>Добавить новый товар</h3>
     <form novalidate ng-submit="submitCreateNewProduct()">

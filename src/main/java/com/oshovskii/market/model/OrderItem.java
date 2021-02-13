@@ -2,8 +2,11 @@ package com.oshovskii.market.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,16 +20,14 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToMany
-    @JoinTable(
-            name = "orders",
-            joinColumns = @JoinColumn(name = "orderItem_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+
 
     @Column(name = "quantity")
     private int quantity;
@@ -36,6 +37,14 @@ public class OrderItem {
 
     @Column(name = "price")
     private int price;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public OrderItem(Product product) {
         this.product = product;
