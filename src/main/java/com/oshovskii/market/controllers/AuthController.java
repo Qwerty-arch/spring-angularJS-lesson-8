@@ -38,8 +38,8 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @GetMapping("/registration")
-    public void registrationUser(@RequestBody JwtRequest registrationRequest) {
-        userService.register(registrationRequest);
-    }
+    //    @GetMapping("/registration")
+//    public void registrationUser(@RequestBody JwtRequest registrationRequest) {
+//        userService.register(registrationRequest);
+//    }
 }

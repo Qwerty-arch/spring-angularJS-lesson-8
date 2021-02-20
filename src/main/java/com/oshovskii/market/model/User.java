@@ -27,12 +27,6 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "address")
-    private String address;
-
-    @Transient
-    private String confirmPassword;
-
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),

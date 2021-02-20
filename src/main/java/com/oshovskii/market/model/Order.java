@@ -31,11 +31,8 @@ public class Order {
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    /////////
-    @ManyToOne
-    @JoinColumn(name = "address")
-    private User user;
-    ////////////////
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "price")
     private int price;
@@ -48,9 +45,10 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Order(Cart cart, User user) {
+    public Order(Cart cart, User user, String address) {
         this.items = new ArrayList<>();
         this.owner = user;
+        this.address = address;
         this.price = cart.getTotalPrice();
         cart.getItems().stream().forEach((oi) -> {
             oi.setOrder(this);

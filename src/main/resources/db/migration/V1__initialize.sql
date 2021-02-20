@@ -3,7 +3,6 @@ create table users (
     username                varchar(30) not null unique,
     password                varchar(80) not null,
     email                   varchar(50) unique,
-    address                 varchar(255),
     created_at              timestamp default current_timestamp,
     updated_at              timestamp default current_timestamp
 );
@@ -26,10 +25,10 @@ values
 ('ROLE_USER'),
 ('ROLE_ADMIN');
 
-insert into users (username, password, email, address)
+insert into users (username, password, email)
 values
-('bob', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com', '221B Baker Street'),
-('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com', '17 Kensington Street');
+('bob', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com'),
+('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com');
 
 insert into users_roles (user_id, role_id)
 values
@@ -37,11 +36,11 @@ values
 (2, 2);
 
 create table products (
-    id              bigserial primary key,
-    title           varchar(255),
-    price           int,
-    created_at      timestamp default current_timestamp,
-    updated_at      timestamp default current_timestamp
+    id                      bigserial primary key,
+    title                   varchar(255),
+    price                   int,
+    created_at              timestamp default current_timestamp,
+    updated_at              timestamp default current_timestamp
 );
 
 insert into products (title, price)
@@ -67,6 +66,7 @@ values
 ('chartreux cat', 40004),
 ('birman cat', 50000);
 
+
 create table orders (
     id                      bigserial primary key,
     owner_id                bigint references users (id),
@@ -87,3 +87,4 @@ create table order_items (
     created_at              timestamp default current_timestamp,
     updated_at              timestamp default current_timestamp
 );
+
