@@ -16,9 +16,7 @@ public class TimeExecutionProfiler {
     private static final Logger logger = LoggerFactory.getLogger(TimeExecutionProfiler.class);
         /*
         *
-        * В угоду универсальности объединил два метода в один.
-        * При необходимсоти можно просто поставить
-        * ("execution(public * com.oshovskii.market.controllers..*.*(..))")
+        * Заменить устеревшие методы
         *
          */
     private static Hashtable<String, Long> hashTableForTimeMethod  = new Hashtable<String, Long>();
@@ -71,6 +69,11 @@ public class TimeExecutionProfiler {
 //                    hashTableCount.forEach((s, count) -> logger.info("--- " + "Method " + s + " complete : " + count));
                 }
             }
+            for (Object name : keys)
+            {
+                logger.info("--" + name + " : " + (hashTableForTimeMethod.get(name) / 1000000));
+            }
+            logger.info("JVM memory in use = " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
             logger.info("End profiling");
         }
 }
