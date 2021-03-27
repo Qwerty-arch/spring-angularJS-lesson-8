@@ -1,4 +1,4 @@
-package com.oshovskii.market;
+package com.oshovskii.market.tests;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
