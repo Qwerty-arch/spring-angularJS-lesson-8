@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import com.oshovskii.market.model.Product;
 import com.oshovskii.market.repositories.ProductRepository;
@@ -25,7 +24,7 @@ public class RepositoriesTest {
     @Test
     public void initDbProductsTest() {
         List<Product> genresList = productRepository.findAll();
-        Assertions.assertEquals(20, genresList.size());
+        Assertions.assertEquals(3, genresList.size());
     }
 
     @Test

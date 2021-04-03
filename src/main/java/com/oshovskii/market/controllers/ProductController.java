@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
@@ -28,10 +26,9 @@ public class ProductController {
         if (page < 1) {
             page = 1;
         }
-        return productService.findAll(ProductSpecifications.build(params), page, 5);
+        return productService.findAll(ProductSpecifications.build(params), page, 4);
     }
 
-    // http://localhost:8189/market/api/v1/products
     @GetMapping("/{id}")
     public ProductDto findProductById(@PathVariable Long id) {
         return productService.findProductDtoById(id).orElseThrow(() -> new ResourceNotFoundException("Product with id: " + id + " doens't exist"));
@@ -53,5 +50,4 @@ public class ProductController {
     public void updateProduct(@PathVariable Long id) {
         productService.deleteById(id);
     }
-
 }

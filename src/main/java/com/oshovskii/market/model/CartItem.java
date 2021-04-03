@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(name = "cart_items")
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -43,10 +43,26 @@ public class OrderItem {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public OrderItem(CartItem cartItem) {
-        this.product = cartItem.getProduct();
-        this.quantity = cartItem.getQuantity();
-        this.pricePerProduct = cartItem.getPricePerProduct();
-        this.price = cartItem.getPrice();
+    public CartItem(Product product) {
+        this.product = product;
+        this.quantity = 1;
+        this.pricePerProduct = product.getPrice();
+        this.price = this.pricePerProduct;
+    }
+
+    public void incrementQuantity() {
+        quantity++;
+        price = quantity * pricePerProduct;
+    }
+
+    public void incrementQuantity(int amount) {
+        quantity += amount;
+        price = quantity * pricePerProduct;
+    }
+
+    public void decrementQuantity() {
+        quantity--;
+        price = quantity * pricePerProduct;
     }
 }
+

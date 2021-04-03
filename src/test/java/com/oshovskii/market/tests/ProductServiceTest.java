@@ -40,22 +40,6 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteById() {
-        Product demoProduct = new Product();
-        demoProduct.setTitle("KitKat");
-        demoProduct.setPrice(50);
-        demoProduct.setId(10L);
-
-        Mockito
-                .doNothing()
-                .when(productRepository)
-                .deleteById(10L);
-
-
-        Mockito.verify(productRepository, Mockito.times(1)).deleteById(ArgumentMatchers.eq(10L));
-    }
-
-    @Test
     public void testSaveProduct() {
         Product demo = new Product();
         demo.setId(10L);

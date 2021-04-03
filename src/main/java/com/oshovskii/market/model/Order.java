@@ -1,7 +1,5 @@
 package com.oshovskii.market.model;
 
-import com.oshovskii.market.beans.Cart;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
@@ -49,10 +47,11 @@ public class Order {
         this.items = new ArrayList<>();
         this.owner = user;
         this.address = address;
-        this.price = cart.getTotalPrice();
-        cart.getItems().stream().forEach((oi) -> {
+        this.price = cart.getPrice();
+        for (CartItem ci : cart.getItems()) {
+            OrderItem oi = new OrderItem(ci);
             oi.setOrder(this);
-            items.add(oi);
-        });
+            this.items.add(oi);
+        }
     }
 }

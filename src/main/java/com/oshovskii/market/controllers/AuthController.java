@@ -1,8 +1,6 @@
 package com.oshovskii.market.controllers;
 
-import com.oshovskii.market.exceptions_handling.ResourceNotFoundException;
-import com.oshovskii.market.model.User;
-
+import com.oshovskii.market.services.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +15,13 @@ import com.oshovskii.market.dto.JwtResponse;
 import com.oshovskii.market.exceptions_handling.MarketError;
 import com.oshovskii.market.services.UserService;
 
-import java.security.Principal;
-
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
+    private final CartService cartService;
 
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
@@ -35,11 +32,8 @@ public class AuthController {
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
         String token = jwtTokenUtil.generateToken(userDetails);
+
+        cartService.getCartForUser(authRequest.getUsername(), authRequest.getCartId());
         return ResponseEntity.ok(new JwtResponse(token));
     }
-
-    //    @GetMapping("/registration")
-//    public void registrationUser(@RequestBody JwtRequest registrationRequest) {
-//        userService.register(registrationRequest);
-//    }
 }

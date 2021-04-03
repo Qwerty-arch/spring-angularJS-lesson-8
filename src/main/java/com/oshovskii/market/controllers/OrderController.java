@@ -1,12 +1,10 @@
 package com.oshovskii.market.controllers;
 
-import com.oshovskii.market.beans.Cart;
 import com.oshovskii.market.dto.OrderDto;
 import com.oshovskii.market.exceptions_handling.ResourceNotFoundException;
 import com.oshovskii.market.model.Order;
-import com.oshovskii.market.model.User;
+import com.oshovskii.market.services.CartService;
 import com.oshovskii.market.services.OrderService;
-import com.oshovskii.market.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,13 +21,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderController {
     private final OrderService orderService;
-    private final UserService userService;
+    private final CartService cartService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderDto createOrderFromCart(Principal principal, @RequestParam String address) {
-        User user = userService.findByUsername(principal.getName()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Order order = orderService.createFromUserCart(user, address);
+    public OrderDto createOrderFromCart(Principal principal, @RequestParam UUID cartUuid, @RequestParam String address) {
+        Order order = orderService.createFromUserCart(principal.getName(), cartUuid, address);
+        cartService.clearCart(cartUuid);
         return new OrderDto(order);
     }
 
